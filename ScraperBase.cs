@@ -59,6 +59,9 @@ namespace Scraper
 
         protected void AddRangeKnownManufacturer(string manufacturer)
         {
+            if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(ManufacturerXPath))
+                throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
+
             var web = new HtmlWeb();
             var document = web.Load(SourceUri);
 
@@ -69,8 +72,14 @@ namespace Scraper
                 var rawPrice = ExtractPrice(container.SelectSingleNode(PriceXPath));
                 var rawSku = ExtractSku(container.SelectSingleNode(SkuPriceXPath));
                 var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
-                
-                Add(rawPrice, rawSku, manufacturer, sourceUri);
+
+                string rawManufacturer;
+                if (string.IsNullOrWhiteSpace(manufacturer))
+                    rawManufacturer = container.SelectSingleNode(ManufacturerXPath).InnerTextClean();
+                else
+                    rawManufacturer = manufacturer;
+
+                Add(rawPrice, rawSku, rawManufacturer, sourceUri);
             }
         }
 
@@ -78,21 +87,7 @@ namespace Scraper
         {
             if (string.IsNullOrWhiteSpace(ManufacturerXPath))
                 throw new ArgumentException("Manufacturer xpath not set", nameof(ManufacturerXPath));
-
-            var web = new HtmlWeb();
-            var document = web.Load(SourceUri);
-
-            var containers = document.DocumentNode.SelectNodes(ContainerXPath);
-
-            foreach (var container in containers)
-            {
-                var rawPrice = ExtractPrice(container.SelectSingleNode(PriceXPath));
-                var rawSku = ExtractSku(container.SelectSingleNode(SkuPriceXPath));
-                var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
-                var rawManufacturer = container.SelectSingleNode(ManufacturerXPath).InnerTextClean();
-                
-                Add(rawPrice, rawSku, rawManufacturer, sourceUri);
-            }
+            AddRangeKnownManufacturer(null);
         }
 
         protected void Add(string price, string manufacturerSku, string manufacturer, string source)
