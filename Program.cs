@@ -11,7 +11,8 @@ namespace Scraper
             var scrapers = new List<ScraperBase>
             {
                 new Baileigh(),
-                new HomeDepot()
+                new HomeDepot(),
+                new PerformanceToolCenter()
             };
 
             foreach (var scraper in scrapers)

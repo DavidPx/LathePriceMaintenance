@@ -49,6 +49,11 @@ namespace Scraper
             return node.InnerTextClean();
         }
 
+        protected virtual string ExtractManufacturer(HtmlNode node)
+        {
+            return node.InnerTextClean();
+        }
+
         protected virtual Uri ProduceFullSourceUri(string anchorHrefValue)
         {
             if (string.IsNullOrWhiteSpace(anchorHrefValue))
@@ -75,7 +80,7 @@ namespace Scraper
 
                 string rawManufacturer;
                 if (string.IsNullOrWhiteSpace(manufacturer))
-                    rawManufacturer = container.SelectSingleNode(ManufacturerXPath).InnerTextClean();
+                    rawManufacturer = ExtractManufacturer(container.SelectSingleNode(ManufacturerXPath));
                 else
                     rawManufacturer = manufacturer;
 
