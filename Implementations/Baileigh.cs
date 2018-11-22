@@ -6,14 +6,23 @@ namespace Scraper.Implementations
     {
         const string manufacturer = "Baileigh";
 
+        public override Uri SourceUri => new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
+
         public override string FriendlyName => manufacturer;
+
+        public override string ContainerXPath => "//li[starts-with(@class, 'item')]";
+
+        public override string PriceXPath => ".//span[@class='price']";
+
+        public override string SkuPriceXPath => ".//h2[@class='product-name']";
+
+        public override string SourceUriAnchorXPath => ".//a[@title='View Details']";
+
+        public override string ManufacturerXPath => manufacturer;
 
         public override void Run()
         {
-            var source = new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
-            
-            AddRangeKnownManufacturer(source, "//li[starts-with(@class, 'item')]", ".//span[@class='price']", ".//h2[@class='product-name']", manufacturer, ".//a[@title='View Details']");
-
+            AddRangeKnownManufacturer(manufacturer);
             Save(manufacturer);
         }
         

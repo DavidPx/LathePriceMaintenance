@@ -25,50 +25,72 @@ namespace Scraper
 
         public abstract void Run();
 
+        public abstract Uri SourceUri { get; }
         public abstract string FriendlyName { get; }
+
+        public abstract string ContainerXPath { get; }
+        public abstract string PriceXPath { get; }
+        public abstract string SkuPriceXPath { get; }
+        public abstract string SourceUriAnchorXPath { get; }
+        public virtual string ManufacturerXPath { get; }
 
         protected void Add(CapturedPrice price)
         {
             prices.Add(price);
         }
 
-        protected void AddRangeKnownManufacturer(Uri page, string containerPath, string pricePath, string manufacturerSkuPath, string manufacturer, string sourcePath)
+        protected virtual string ExtractPrice(HtmlNode node)
+        {
+            return node.InnerTextClean();
+        }
+
+        protected virtual string ExtractSku(HtmlNode node)
+        {
+            return node.InnerTextClean();
+        }
+
+        protected virtual Uri ProduceFullSourceUri(string anchorHrefValue)
+        {
+            if (string.IsNullOrWhiteSpace(anchorHrefValue))
+                throw new ArgumentException("Anchor href value is bad", nameof(anchorHrefValue));
+
+            return new Uri(anchorHrefValue);
+        }
+
+        protected void AddRangeKnownManufacturer(string manufacturer)
         {
             var web = new HtmlWeb();
-            var document = web.Load(page);
+            var document = web.Load(SourceUri);
 
-            var containers = document.DocumentNode.SelectNodes(containerPath);
+            var containers = document.DocumentNode.SelectNodes(ContainerXPath);
 
             foreach (var container in containers)
             {
-                var rawPrice = container.SelectSingleNode(pricePath).InnerTextClean();
-                var rawSku = container.SelectSingleNode(manufacturerSkuPath).InnerTextClean();
-                var sourceUri = container.SelectSingleNode(sourcePath).GetAttributeValue("href", "");
-
-                if (string.IsNullOrWhiteSpace(sourceUri))
-                    throw new InvalidOperationException("Source URI not found");
-
+                var rawPrice = ExtractPrice(container.SelectSingleNode(PriceXPath));
+                var rawSku = ExtractSku(container.SelectSingleNode(SkuPriceXPath));
+                var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
+                
                 Add(rawPrice, rawSku, manufacturer, sourceUri);
             }
         }
 
-        protected void AddRange(Uri page, string containerPath, string pricePath, string manufacturerSkuPath, string manufacturerPath, string sourcePath)
+        protected void AddRange()
         {
-            var web = new HtmlWeb();
-            var document = web.Load(page);
+            if (string.IsNullOrWhiteSpace(ManufacturerXPath))
+                throw new ArgumentException("Manufacturer xpath not set", nameof(ManufacturerXPath));
 
-            var containers = document.DocumentNode.SelectNodes(containerPath);
+            var web = new HtmlWeb();
+            var document = web.Load(SourceUri);
+
+            var containers = document.DocumentNode.SelectNodes(ContainerXPath);
 
             foreach (var container in containers)
             {
-                var rawPrice = container.SelectSingleNode(pricePath).InnerTextClean();
-                var rawSku = container.SelectSingleNode(manufacturerSkuPath).InnerTextClean();
-                var sourceUri = container.SelectSingleNode(sourcePath).GetAttributeValue("href", "");
-                var rawManufacturer = container.SelectSingleNode(manufacturerPath).InnerTextClean();
-
-                if (string.IsNullOrWhiteSpace(sourceUri))
-                    throw new InvalidOperationException("Source URI not found");
-
+                var rawPrice = ExtractPrice(container.SelectSingleNode(PriceXPath));
+                var rawSku = ExtractSku(container.SelectSingleNode(SkuPriceXPath));
+                var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
+                var rawManufacturer = container.SelectSingleNode(ManufacturerXPath).InnerTextClean();
+                
                 Add(rawPrice, rawSku, rawManufacturer, sourceUri);
             }
         }

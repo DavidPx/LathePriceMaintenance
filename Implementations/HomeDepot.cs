@@ -8,28 +8,36 @@ namespace Scraper.Implementations
     {
         public override string FriendlyName => "Home Depot";
 
+        public override Uri SourceUri => new Uri("https://www.homedepot.com/b/Tools-Power-Tools-Woodworking-Tools-Lathes/N-5yc1vZc289");
+
+        public override string ContainerXPath => "//div[@data-section='gridview']/div[contains(@class,'js-pod')]";
+
+        public override string PriceXPath => ".//div[@class='price__numbers']";
+
+        public override string SkuPriceXPath => ".//div[@class='pod-plp__model']";
+
+        public override string SourceUriAnchorXPath => ".//a[@data-pod-type='pr']";
+
+        public override string ManufacturerXPath => ".//span[@class='pod-plp__brand-name']";
+
+        protected override string ExtractSku(HtmlNode node)
+        {
+            return node.InnerTextClean().Replace("Model#", "");
+        }
+
+        protected override string ExtractPrice(HtmlNode node)
+        {
+            return Regex.Replace(node.InnerTextClean(), @"(\d\d)$", ".$1");
+        }
+
+        protected override Uri ProduceFullSourceUri(string anchorHrefValue)
+        {
+            return anchorHrefValue.MakeFullUri(SourceUri);
+        }
+
         public override void Run()
         {
-            var source = new Uri("https://www.homedepot.com/b/Tools-Power-Tools-Woodworking-Tools-Lathes/N-5yc1vZc289");
-
-            var web = new HtmlWeb();
-            var document = web.Load(source);
-
-            var containers = document.DocumentNode.SelectNodes("//div[@data-section='gridview']/div[contains(@class,'js-pod')]");
-
-            foreach (var container in containers)
-            {
-                var rawSku = container.SelectSingleNode(".//div[@class='pod-plp__model']").InnerTextClean();
-                var rawPrice = container.SelectSingleNode(".//div[@class='price__numbers']").InnerTextClean();
-                var rawManufacturer = container.SelectSingleNode(".//span[@class='pod-plp__brand-name']").InnerTextClean();
-                var sourceUri = container.SelectSingleNode(".//a[@data-pod-type='pr']").GetAttributeValue("href", "").MakeFullUri(source);
-                
-                rawSku = rawSku.Replace("Model#", "").Trim();
-                rawPrice = Regex.Replace(rawPrice, @"(\d\d)$", ".$1");
-                               
-                Add(rawPrice, rawSku, rawManufacturer, sourceUri);
-            }
-
+            AddRange();
             Save("HomeDepot");
         }
         
