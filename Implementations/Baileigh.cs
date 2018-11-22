@@ -17,9 +17,7 @@ namespace Scraper.Implementations
         public override string SkuPriceXPath => ".//h2[@class='product-name']";
 
         public override string SourceUriAnchorXPath => ".//a[@title='View Details']";
-
-        public override string ManufacturerXPath => manufacturer;
-
+        
         public override void Run()
         {
             AddRangeKnownManufacturer(manufacturer);
