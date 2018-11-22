@@ -22,12 +22,14 @@ namespace Scraper.Implementations
 
         protected override string ExtractSku(HtmlNode node)
         {
-            return node.InnerTextClean().Replace("Model#", "");
+            var raw = base.ExtractSku(node);
+            return raw.Replace("Model#", "");
         }
 
         protected override string ExtractPrice(HtmlNode node)
         {
-            return Regex.Replace(node.InnerTextClean(), @"(\d\d)$", ".$1");
+            var raw = base.ExtractPrice(node);
+            return Regex.Replace(raw, @"(\d\d)$", ".$1");
         }
 
         protected override Uri ProduceFullSourceUri(string anchorHrefValue)

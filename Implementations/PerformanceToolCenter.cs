@@ -24,7 +24,7 @@ namespace Scraper.Implementations
 
         protected override string ExtractSku(HtmlNode node)
         {
-            var raw = node.InnerTextClean();
+            var raw = base.ExtractSku(node);
             raw = Regex.Replace(raw, @"\w+ (MLAREVO \S+|\S+).*", "$1");
             raw = raw.Replace("MLAREVO", "");
             return raw.Trim();
