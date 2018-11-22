@@ -8,19 +8,19 @@ namespace Scraper.Implementations
 {
     class PerformanceToolCenter : ScraperBase
     {
-        public override Uri SourceUri => new Uri("https://www.performancetoolcenter.com/lathes/");
+        protected override Uri SourceUri => new Uri("https://www.performancetoolcenter.com/lathes/");
 
-        public override string FriendlyName => "Performance Tool Center";
+        protected override string FriendlyName => "Performance Tool Center";
 
-        public override string ContainerXPath => "//div[@id='CategoryContent']//div[@class='ProductDetails']";
+        protected override string ContainerXPath => "//div[@id='CategoryContent']//div[@class='ProductDetails']";
 
-        public override string ManufacturerXPath => ".//a";
+        protected override string ManufacturerXPath => ".//a";
 
-        public override string PriceXPath => ".//em[contains(@class, 'p-price')]";
+        protected override string PriceXPath => ".//em[contains(@class, 'p-price')]";
 
-        public override string SkuPriceXPath => ".//a";
+        protected override string SkuPriceXPath => ".//a";
 
-        public override string SourceUriAnchorXPath => ".//a";
+        protected override string SourceUriAnchorXPath => ".//a";
 
         protected override string ExtractSku(HtmlNode node)
         {

@@ -25,14 +25,14 @@ namespace Scraper
 
         public abstract void Run();
 
-        public abstract Uri SourceUri { get; }
-        public abstract string FriendlyName { get; }
+        protected abstract Uri SourceUri { get; }
+        protected abstract string FriendlyName { get; }
 
-        public abstract string ContainerXPath { get; }
-        public abstract string PriceXPath { get; }
-        public abstract string SkuPriceXPath { get; }
-        public abstract string SourceUriAnchorXPath { get; }
-        public virtual string ManufacturerXPath { get; }
+        protected abstract string ContainerXPath { get; }
+        protected abstract string PriceXPath { get; }
+        protected abstract string SkuPriceXPath { get; }
+        protected abstract string SourceUriAnchorXPath { get; }
+        protected virtual string ManufacturerXPath { get; }
 
         protected void Add(CapturedPrice price)
         {

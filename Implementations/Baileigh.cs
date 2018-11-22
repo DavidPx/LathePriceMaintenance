@@ -6,17 +6,17 @@ namespace Scraper.Implementations
     {
         const string manufacturer = "Baileigh";
 
-        public override Uri SourceUri => new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
+        protected override Uri SourceUri => new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
 
-        public override string FriendlyName => manufacturer;
+        protected override string FriendlyName => manufacturer;
 
-        public override string ContainerXPath => "//li[starts-with(@class, 'item')]";
+        protected override string ContainerXPath => "//li[starts-with(@class, 'item')]";
 
-        public override string PriceXPath => ".//span[@class='price']";
+        protected override string PriceXPath => ".//span[@class='price']";
 
-        public override string SkuPriceXPath => ".//h2[@class='product-name']";
+        protected override string SkuPriceXPath => ".//h2[@class='product-name']";
 
-        public override string SourceUriAnchorXPath => ".//a[@title='View Details']";
+        protected override string SourceUriAnchorXPath => ".//a[@title='View Details']";
         
         public override void Run()
         {
