@@ -15,13 +15,16 @@ namespace Scraper
                 new WoodworkersEmporium(),
                 new Grizzly(),
                 new AcmeTools(),
-                new BusyBee()
+                new BusyBee(),
+                new WoodCraft()
             };
 
-            foreach (var scraper in scrapers)
-            {
-                scraper.Run();
-            }
+            //foreach (var scraper in scrapers)
+            //{
+            //    scraper.Run();
+            //}
+
+            new WoodCraft().Run();
             
         }
     }
