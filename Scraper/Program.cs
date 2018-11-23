@@ -1,5 +1,4 @@
 ﻿using Scraper.Implementations;
-using System;
 using System.Collections.Generic;
 
 namespace Scraper
@@ -12,7 +11,8 @@ namespace Scraper
             {
                 new Baileigh(),
                 new HomeDepot(),
-                new PerformanceToolCenter()
+                new PerformanceToolCenter(),
+                new WoodworkersEmporium()
             };
 
             foreach (var scraper in scrapers)
