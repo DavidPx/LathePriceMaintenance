@@ -2,6 +2,7 @@
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml.XPath;
 
@@ -30,7 +31,7 @@ namespace Scraper
 
         protected abstract string ContainerXPath { get; }
         protected abstract string PriceXPath { get; }
-        protected abstract string SkuPriceXPath { get; }
+        protected abstract string SkuXPath { get; }
         protected abstract string SourceUriAnchorXPath { get; }
         protected virtual string ManufacturerXPath { get; }
 
@@ -71,14 +72,21 @@ namespace Scraper
                 throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
 
             var web = new HtmlWeb();
+            
             var document = web.Load(SourceUri);
 
+            if (web.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new InvalidOperationException($"{FriendlyName} returned {web.StatusCode}, not OK");
+            
             var containers = document.DocumentNode.SelectNodes(ContainerXPath);
+
+            if (containers == null)
+                throw new InvalidOperationException($"Unable to find containers element on {FriendlyName}");
 
             foreach (var container in containers)
             {
                 var rawPrice = ExtractPrice(container.SelectSingleNode(PriceXPath));
-                var rawSku = ExtractSku(container.SelectSingleNode(SkuPriceXPath));
+                var rawSku = ExtractSku(container.SelectSingleNode(SkuXPath));
                 var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
 
                 string rawManufacturer;
@@ -105,15 +113,22 @@ namespace Scraper
 
         protected void Add(string price, string manufacturerSku, string manufacturer, Uri source)
         {
-            var data = new CapturedPrice
+            if (decimal.TryParse(price, NumberStyles.Number | NumberStyles.AllowCurrencySymbol | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out decimal parsedPrice))
             {
-                Price = decimal.Parse(price, System.Globalization.NumberStyles.Number | System.Globalization.NumberStyles.AllowCurrencySymbol),
-                ManufacturerSku = manufacturerSku.Trim(),
-                Manufacturer = manufacturer.Trim(),
-                Source = source.ToString(),
-                Extraction_Time = DateTimeOffset.Now
-            };
-            prices.Add(data);
+                var data = new CapturedPrice
+                {
+                    Price = parsedPrice,
+                    ManufacturerSku = manufacturerSku.Trim(),
+                    Manufacturer = manufacturer.Trim(),
+                    Source = source.ToString(),
+                    Extraction_Time = DateTimeOffset.Now
+                };
+                prices.Add(data);
+            }
+            else
+            {
+                Console.WriteLine($"Unable to parse price '{price}' for {manufacturerSku}, {source}");
+            }
         }
 
         protected void Save(string fileNameNoExtension)

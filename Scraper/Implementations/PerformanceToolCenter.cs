@@ -18,7 +18,7 @@ namespace Scraper.Implementations
 
         protected override string PriceXPath => ".//em[contains(@class, 'p-price')]";
 
-        protected override string SkuPriceXPath => ".//a";
+        protected override string SkuXPath => ".//a";
 
         protected override string SourceUriAnchorXPath => ".//a";
 

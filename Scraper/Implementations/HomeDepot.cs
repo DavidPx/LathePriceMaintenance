@@ -14,7 +14,7 @@ namespace Scraper.Implementations
 
         protected override string PriceXPath => ".//div[@class='price__numbers']";
 
-        protected override string SkuPriceXPath => ".//div[@class='pod-plp__model']";
+        protected override string SkuXPath => ".//div[@class='pod-plp__model']";
 
         protected override string SourceUriAnchorXPath => ".//a[@data-pod-type='pr']";
 

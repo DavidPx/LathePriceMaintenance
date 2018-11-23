@@ -13,7 +13,8 @@ namespace Scraper
                 new HomeDepot(),
                 new PerformanceToolCenter(),
                 new WoodworkersEmporium(),
-                new Grizzly()
+                new Grizzly(),
+                new AcmeTools()
             };
 
             foreach (var scraper in scrapers)

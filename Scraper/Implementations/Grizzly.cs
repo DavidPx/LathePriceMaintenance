@@ -13,7 +13,7 @@ namespace Scraper.Implementations
 
         protected override string PriceXPath => ".//div[@class='searchresult-metadata']";
 
-        protected override string SkuPriceXPath => ".//div[@class='searchresult-metadata']";
+        protected override string SkuXPath => ".//div[@class='searchresult-metadata']";
 
         protected override string SourceUriAnchorXPath => ".//a[@class='btn btn-cta']";
 

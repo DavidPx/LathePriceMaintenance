@@ -14,7 +14,7 @@ namespace Scraper.Implementations
 
         protected override string PriceXPath => ".//span[contains(@class,'price--main')]";
 
-        protected override string SkuPriceXPath => ".//*[@class='card-title']";
+        protected override string SkuXPath => ".//*[@class='card-title']";
 
         protected override string SourceUriAnchorXPath => ".//*[@class='card-title']/a";
 
