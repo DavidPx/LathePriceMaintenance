@@ -67,7 +67,7 @@ void Main()
 	});
 
 	var spreadsheetId = "1rH38d82bQG1XGvxDhPq2N3SNvjItcgpNeUHhpV-qOZk";
-	var range = "Test!A:F";
+	var range = "Input!A2:F";
 	
 	var getter = service.Spreadsheets.Values.Get(spreadsheetId, range);
 	var existingData = getter.Execute();
@@ -79,17 +79,20 @@ void Main()
 	{
 		values.Values.Add(new List<object> { row.ManufacturerSku, row.Price, row.Manufacturer, row.Source.ToString(), row.Extraction_Time, row.Site });
 	}
-	
+
 	// Add in existing data that isn't in the latest extraction; prevent missing prices from wrecking our source data.  Merge it in.
-	foreach (var existingRow in existingData.Values)
+	if (existingData?.Values != null)
 	{
-		var sku = existingRow[0].ToString();
-		var site = existingRow[5].ToString();
-		
-		if (!values.Values.Any(v => v[0].Equals(sku) && v[5].Equals(site)))
+		foreach (var existingRow in existingData.Values)
 		{
-			values.Values.Add(existingRow);
-			existingRow.Dump("backfilled existing row");
+			var sku = existingRow[0].ToString();
+			var site = existingRow[5].ToString();
+
+			if (!values.Values.Any(v => v[0].Equals(sku) && v[5].Equals(site)))
+			{
+				values.Values.Add(existingRow);
+				existingRow.Dump("backfilled existing row");
+			}
 		}
 	}
 	

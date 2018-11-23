@@ -16,7 +16,7 @@ namespace Scraper
                 throw new ArgumentException("Anchor href value is bad", nameof(anchorHrefValue));
 
             if (anchorHrefValue.StartsWith("/"))
-                return new Uri(StartingUri.AbsoluteUri + anchorHrefValue);
+                return new Uri(StartingUri.GetLeftPart(UriPartial.Authority) + anchorHrefValue);
 
             return new Uri(anchorHrefValue);
         }
