@@ -59,6 +59,9 @@ namespace Scraper
             if (string.IsNullOrWhiteSpace(anchorHrefValue))
                 throw new ArgumentException("Anchor href value is bad", nameof(anchorHrefValue));
 
+            if (anchorHrefValue.StartsWith("/"))
+                return new Uri(SourceUri.AbsoluteUri + anchorHrefValue);
+
             return new Uri(anchorHrefValue);
         }
 
