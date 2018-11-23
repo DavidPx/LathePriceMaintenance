@@ -14,7 +14,8 @@ namespace Scraper
                 new PerformanceToolCenter(),
                 new WoodworkersEmporium(),
                 new Grizzly(),
-                new AcmeTools()
+                new AcmeTools(),
+                new BusyBee()
             };
 
             foreach (var scraper in scrapers)
