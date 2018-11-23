@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Xml.XPath;
 
 namespace Scraper
@@ -21,9 +23,15 @@ namespace Scraper
 
         public ScraperBase(DirectoryInfo outputLocation)
         {
+            Exclusions = new List<ManufacturerExclusion>();
             this.outputLocation = outputLocation;
             prices = new List<CapturedPrice>();
         }
+
+        /// <summary>
+        /// SKUs matching one of these won't be added
+        /// </summary>
+        protected virtual IList<ManufacturerExclusion> Exclusions { get; }
 
         protected abstract string ContainerXPath { get; }
         protected abstract string PriceXPath { get; }
@@ -46,12 +54,7 @@ namespace Scraper
         }
 
         public abstract void Run();
-
-        protected void Add(CapturedPrice price)
-        {
-            prices.Add(price);
-        }
-
+        
         protected virtual bool HandlePreRequest(HttpWebRequest request)
         {
             return true;
@@ -116,6 +119,11 @@ namespace Scraper
 
         protected void Add(string price, string manufacturerSku, string manufacturer, Uri source)
         {
+            if (Exclusions.Any(
+                r => manufacturer.Equals(r.Manufacturer, StringComparison.OrdinalIgnoreCase) 
+                && r.SkuExclusionRegexes.Any(x => Regex.IsMatch(manufacturerSku, x))))
+                return;
+
             if (decimal.TryParse(price, NumberStyles.Number | NumberStyles.AllowCurrencySymbol | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out decimal parsedPrice))
             {
                 var data = new CapturedPrice

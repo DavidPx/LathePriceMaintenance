@@ -20,7 +20,8 @@ namespace Scraper
                 new WoodCraft(),
                 new Rockler(),
                 new HarborFreight(),
-                new EliteMetalTools()
+                new EliteMetalTools(),
+                new FactoryAuthorizedOutlet()
             };
 
             Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");

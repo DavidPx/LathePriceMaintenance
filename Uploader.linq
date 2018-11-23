@@ -77,7 +77,14 @@ void Main()
 	values.Values = new List<IList<object>>();
 	foreach (var row in allPrices)
 	{
-		values.Values.Add(new List<object> { row.ManufacturerSku, row.Price, row.Manufacturer, row.Source.ToString(), row.Extraction_Time, row.Site });
+		// Strip off timezone... sheets doesn't like it
+		values.Values.Add(new List<object> { row.ManufacturerSku, row.Price, row.Manufacturer, row.Source.ToString(), row.Extraction_Time.ToString("d"), row.Site });
+		
+		// See if there is a new SKU
+		if (!existingData.Values?.Any(x => x[0].Equals(row.ManufacturerSku)) == true)
+		{
+			row.Dump("Not found in source data");
+		}
 	}
 
 	// Add in existing data that isn't in the latest extraction; prevent missing prices from wrecking our source data.  Merge it in.
