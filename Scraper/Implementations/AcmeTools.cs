@@ -8,7 +8,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("http://www.acmetools.com/shop/tools/woodworking-lathes");  // new Uri("http://www.acmetools.com/shop/tools/woodworking-lathes?fetchFacets=true#facet:&facetLimit:&productBeginIndex:0&orderBy:5&pageView:grid&minPrice:&maxPrice:&pageSize:96");
 
-        protected override string FriendlyName => "Acme Tools";
+        public override string FriendlyName => "Acme Tools";
         protected override string FileName => nameof(AcmeTools);
 
         protected override string ContainerXPath => "//div[@class='product_listing_container']//li";

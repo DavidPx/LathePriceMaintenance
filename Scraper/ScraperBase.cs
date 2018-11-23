@@ -58,7 +58,7 @@ namespace Scraper
         }
 
         protected abstract Uri StartingUri { get; }
-        protected abstract string FriendlyName { get; }
+        public abstract string FriendlyName { get; }
         protected abstract string FileName { get; }
 
         protected abstract void AddPriceFromContainerNode(HtmlNode containerNode, string manufacturer);

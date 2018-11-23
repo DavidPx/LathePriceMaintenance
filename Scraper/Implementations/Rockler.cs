@@ -11,7 +11,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("https://www.rockler.com/power-tools/lathes");
 
-        protected override string FriendlyName => nameof(Rockler);
+        public override string FriendlyName => nameof(Rockler);
         protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//div[@class='product-item-info']";

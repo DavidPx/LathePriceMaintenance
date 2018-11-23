@@ -23,12 +23,39 @@ namespace Scraper
                 new EliteMetalTools()
             };
 
+            Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");
+            int i = 0;
+
             foreach (var scraper in scrapers)
             {
-                scraper.Run();
+                Console.WriteLine($"[{i++}]: {scraper.FriendlyName}");
             }
 
-            //new EliteMetalTools().Run();
+            var entry = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(entry))
+            {
+                foreach (var scraper in scrapers)
+                {
+                    scraper.Run();
+                }
+            }
+            else
+            {
+                if (int.TryParse(entry, out var selection))
+                {
+                    if (selection < 0 || selection >= scrapers.Count)
+                    {
+                        Console.WriteLine("input out of range");
+                    }
+                    scrapers[selection].Run();
+                }
+                else
+                {
+                    Console.WriteLine("invalid selection");
+                }
+            }
+            
             Console.WriteLine("Press enter to exit");
             Console.ReadLine();
         }

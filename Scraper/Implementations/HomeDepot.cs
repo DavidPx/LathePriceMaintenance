@@ -6,7 +6,7 @@ namespace Scraper.Implementations
 {
     class HomeDepot : AllInOneBase
     {
-        protected override string FriendlyName => "Home Depot";
+        public override string FriendlyName => "Home Depot";
         protected override string FileName => nameof(HomeDepot);
 
         protected override Uri StartingUri => new Uri("https://www.homedepot.com/b/Tools-Power-Tools-Woodworking-Tools-Lathes/N-5yc1vZc289");

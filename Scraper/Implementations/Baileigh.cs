@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace Scraper.Implementations
 {
@@ -8,7 +10,7 @@ namespace Scraper.Implementations
 
         protected override Uri StartingUri => new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
 
-        protected override string FriendlyName => manufacturer;
+        public override string FriendlyName => manufacturer;
         protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//li[starts-with(@class, 'item')]";
@@ -18,7 +20,14 @@ namespace Scraper.Implementations
         protected override string SkuXPath => ".//h2[@class='product-name']";
 
         protected override string SourceUriAnchorXPath => ".//a[@title='View Details']";
-        
+
+        protected override string ExtractSku(HtmlNode node)
+        {
+            // Bench Top Wood Lathe WL-1218VS
+            var raw = base.ExtractSku(node);
+            return Regex.Match(raw, @"\S+$").Value;
+        }
+
         public override void Run()
         {
             AddRangeKnownManufacturer(manufacturer);

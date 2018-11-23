@@ -8,7 +8,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("https://www.busybeetools.com/categories/Woodworking/Wood-Lathes/Lathes/");
 
-        protected override string FriendlyName => nameof(BusyBee);
+        public override string FriendlyName => nameof(BusyBee);
         protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//ul[@class='productGrid']/li";

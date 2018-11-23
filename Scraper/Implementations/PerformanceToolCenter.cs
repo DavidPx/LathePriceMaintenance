@@ -10,7 +10,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("https://www.performancetoolcenter.com/lathes/");
 
-        protected override string FriendlyName => "Performance Tool Center";
+        public override string FriendlyName => "Performance Tool Center";
         protected override string FileName => nameof(PerformanceToolCenter);
 
         protected override string ContainerXPath => "//div[@id='CategoryContent']//div[@class='ProductDetails']";

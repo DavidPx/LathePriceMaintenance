@@ -7,7 +7,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("http://www.grizzly.com/wood-lathes?pagesize=96");
 
-        protected override string FriendlyName => "Grizzly";
+        public override string FriendlyName => "Grizzly";
         protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//div[contains(@class, 'searchresult ')]";

@@ -8,7 +8,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("https://www.woodworkersemporium.com/shop-by-category/machinery/lathes/?sort=alphaasc&limit=100&mode=4");
 
-        protected override string FriendlyName => "Woodworker's Emmporium";
+        public override string FriendlyName => "Woodworker's Emmporium";
         protected override string FileName => nameof(WoodworkersEmporium);
 
         protected override string ContainerXPath => "//li[@class='product']";

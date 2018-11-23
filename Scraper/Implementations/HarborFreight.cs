@@ -9,7 +9,7 @@ namespace Scraper.Implementations
     {
         protected override Uri StartingUri => new Uri("https://www.harborfreight.com/catalogsearch/result/index/?dir=asc&order=EAScore%2Cf%2CEAFeatured+Weight%2Cf%2CSale+Rank%2Cf&q=wood+lathe");
 
-        protected override string FriendlyName => "Harbor Freight";
+        public override string FriendlyName => "Harbor Freight";
         protected override string FileName => nameof(HarborFreight);
 
         protected override string ContainerXPath => "//ul[contains(@class,'products-grid')]/li[contains(@class, 'item')]";
