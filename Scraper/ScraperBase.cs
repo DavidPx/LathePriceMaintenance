@@ -82,7 +82,7 @@ namespace Scraper
             
             var document = web.Load(SourceUri);
 
-            if (web.StatusCode != System.Net.HttpStatusCode.OK)
+            if (web.StatusCode != HttpStatusCode.OK)
                 throw new InvalidOperationException($"{FriendlyName} returned {web.StatusCode}, not OK");
             
             var containers = document.DocumentNode.SelectNodes(ContainerXPath);
@@ -96,7 +96,7 @@ namespace Scraper
                 if (priceNode == null)
                 {
                     Console.WriteLine($"Unable to find price node! Skipping.  inner text of container: {container.InnerTextClean()}");
-                    return;
+                    continue;
                 }
 
                 var rawPrice = ExtractPrice(priceNode);

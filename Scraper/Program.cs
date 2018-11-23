@@ -18,13 +18,16 @@ namespace Scraper
                 new AcmeTools(),
                 new BusyBee(),
                 new WoodCraft(),
-                new Rockler()
+                new Rockler(),
+                new HarborFreight()
             };
 
-            foreach (var scraper in scrapers)
-            {
-                scraper.Run();
-            }
+            //foreach (var scraper in scrapers)
+            //{
+            //    scraper.Run();
+            //}
+
+            new HarborFreight().Run();
 
         }
     }
