@@ -4,11 +4,12 @@ using HtmlAgilityPack;
 
 namespace Scraper.Implementations
 {
-    class WoodworkersEmporium : ScraperBase
+    class WoodworkersEmporium : AllInOneBase
     {
-        protected override Uri SourceUri => new Uri("https://www.woodworkersemporium.com/shop-by-category/machinery/lathes/?sort=alphaasc&limit=100&mode=4");
+        protected override Uri StartingUri => new Uri("https://www.woodworkersemporium.com/shop-by-category/machinery/lathes/?sort=alphaasc&limit=100&mode=4");
 
         protected override string FriendlyName => "Woodworker's Emmporium";
+        protected override string FileName => nameof(WoodworkersEmporium);
 
         protected override string ContainerXPath => "//li[@class='product']";
 
@@ -29,7 +30,6 @@ namespace Scraper.Implementations
         public override void Run()
         {
             AddRange();
-            Save("WoodworkersEmporium");
         }
     }
 }

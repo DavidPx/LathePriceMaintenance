@@ -9,7 +9,7 @@ using System.Xml.XPath;
 
 namespace Scraper
 {
-    public abstract class ScraperBase
+    abstract class ScraperBase
     {
         DirectoryInfo outputLocation;
         List<CapturedPrice> prices;
@@ -25,21 +25,10 @@ namespace Scraper
             prices = new List<CapturedPrice>();
         }
 
-        public abstract void Run();
-
-        protected abstract Uri SourceUri { get; }
-        protected abstract string FriendlyName { get; }
-
         protected abstract string ContainerXPath { get; }
         protected abstract string PriceXPath { get; }
         protected abstract string SkuXPath { get; }
-        protected abstract string SourceUriAnchorXPath { get; }
         protected virtual string ManufacturerXPath { get; }
-
-        protected void Add(CapturedPrice price)
-        {
-            prices.Add(price);
-        }
 
         protected virtual string ExtractPrice(HtmlNode node)
         {
@@ -56,15 +45,11 @@ namespace Scraper
             return node.InnerTextClean();
         }
 
-        protected virtual Uri ProduceFullSourceUri(string anchorHrefValue)
+        public abstract void Run();
+
+        protected void Add(CapturedPrice price)
         {
-            if (string.IsNullOrWhiteSpace(anchorHrefValue))
-                throw new ArgumentException("Anchor href value is bad", nameof(anchorHrefValue));
-
-            if (anchorHrefValue.StartsWith("/"))
-                return new Uri(SourceUri.AbsoluteUri + anchorHrefValue);
-
-            return new Uri(anchorHrefValue);
+            prices.Add(price);
         }
 
         protected virtual bool HandlePreRequest(HttpWebRequest request)
@@ -72,44 +57,48 @@ namespace Scraper
             return true;
         }
 
+        protected abstract Uri StartingUri { get; }
+        protected abstract string FriendlyName { get; }
+        protected abstract string FileName { get; }
+
+        protected abstract void AddPriceFromContainerNode(HtmlNode containerNode, string manufacturer);
+
         protected void AddRangeKnownManufacturer(string manufacturer)
         {
-            if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(ManufacturerXPath))
-                throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
-
-            var web = new HtmlWeb();
-            web.PreRequest += HandlePreRequest;
-            
-            var document = web.Load(SourceUri);
-
-            if (web.StatusCode != HttpStatusCode.OK)
-                throw new InvalidOperationException($"{FriendlyName} returned {web.StatusCode}, not OK");
-            
-            var containers = document.DocumentNode.SelectNodes(ContainerXPath);
-
-            if (containers == null)
-                throw new InvalidOperationException($"Unable to find containers element on {FriendlyName}");
-
-            foreach (var container in containers)
+            try
             {
-                var priceNode = container.SelectSingleNode(PriceXPath);
-                if (priceNode == null)
+                if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(ManufacturerXPath))
+                    throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
+
+                var web = new HtmlWeb();
+                web.PreRequest += HandlePreRequest;
+
+                Console.WriteLine($"Fetching {FriendlyName}...");
+
+                var document = web.Load(StartingUri);
+
+                if (web.StatusCode != HttpStatusCode.OK)
+                    throw new InvalidOperationException($"{FriendlyName} returned {web.StatusCode}, not OK");
+
+                var containers = document.DocumentNode.SelectNodes(ContainerXPath);
+
+                if (containers == null)
+                    throw new InvalidOperationException($"Unable to find containers element on {FriendlyName}");
+
+                Console.WriteLine($"{FriendlyName}, {containers.Count} containers.");
+
+                foreach (var container in containers)
                 {
-                    Console.WriteLine($"Unable to find price node! Skipping.  inner text of container: {container.InnerTextClean()}");
-                    continue;
+                    AddPriceFromContainerNode(container, manufacturer);
+                    Console.Write(".");
                 }
+                Console.WriteLine("");
 
-                var rawPrice = ExtractPrice(priceNode);
-                var rawSku = ExtractSku(container.SelectSingleNode(SkuXPath));
-                var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
-
-                string rawManufacturer;
-                if (string.IsNullOrWhiteSpace(manufacturer))
-                    rawManufacturer = ExtractManufacturer(container.SelectSingleNode(ManufacturerXPath));
-                else
-                    rawManufacturer = manufacturer;
-
-                Add(rawPrice, rawSku, rawManufacturer, sourceUri);
+                Save(FileName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception on {FriendlyName}: {e}");
             }
         }
 

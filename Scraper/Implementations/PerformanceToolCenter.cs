@@ -6,11 +6,12 @@ using HtmlAgilityPack;
 
 namespace Scraper.Implementations
 {
-    class PerformanceToolCenter : ScraperBase
+    class PerformanceToolCenter : AllInOneBase
     {
-        protected override Uri SourceUri => new Uri("https://www.performancetoolcenter.com/lathes/");
+        protected override Uri StartingUri => new Uri("https://www.performancetoolcenter.com/lathes/");
 
         protected override string FriendlyName => "Performance Tool Center";
+        protected override string FileName => nameof(PerformanceToolCenter);
 
         protected override string ContainerXPath => "//div[@id='CategoryContent']//div[@class='ProductDetails']";
 
@@ -45,7 +46,6 @@ namespace Scraper.Implementations
         public override void Run()
         {
             AddRange();
-            Save("PerformanceToolCenter");
         }
     }
 }

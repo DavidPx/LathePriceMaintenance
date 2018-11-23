@@ -4,11 +4,12 @@ using HtmlAgilityPack;
 
 namespace Scraper.Implementations
 {
-    class WoodCraft : ScraperBase
+    class WoodCraft : AllInOneBase
     {
-        protected override Uri SourceUri => new Uri("https://www.woodcraft.com/categories/lathes");
+        protected override Uri StartingUri => new Uri("https://www.woodcraft.com/categories/lathes");
 
         protected override string FriendlyName => nameof(WoodCraft);
+        protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//div[@class='product-summary__info']";
 
@@ -45,7 +46,6 @@ namespace Scraper.Implementations
         public override void Run()
         {
             AddRange();
-            Save(FriendlyName);
         }
     }
 }

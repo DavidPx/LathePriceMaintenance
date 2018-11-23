@@ -4,11 +4,12 @@ using System.Text;
 
 namespace Scraper.Implementations
 {
-    class BusyBee : ScraperBase
+    class BusyBee : AllInOneBase
     {
-        protected override Uri SourceUri => new Uri("https://www.busybeetools.com/categories/Woodworking/Wood-Lathes/Lathes/");
+        protected override Uri StartingUri => new Uri("https://www.busybeetools.com/categories/Woodworking/Wood-Lathes/Lathes/");
 
         protected override string FriendlyName => nameof(BusyBee);
+        protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//ul[@class='productGrid']/li";
 
@@ -21,7 +22,6 @@ namespace Scraper.Implementations
         public override void Run()
         {
             AddRangeKnownManufacturer("Craftex");
-            Save(FriendlyName);
         }
     }
 }

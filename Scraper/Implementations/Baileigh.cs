@@ -2,13 +2,14 @@
 
 namespace Scraper.Implementations
 {
-    class Baileigh : ScraperBase
+    class Baileigh : AllInOneBase
     {
         const string manufacturer = "Baileigh";
 
-        protected override Uri SourceUri => new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
+        protected override Uri StartingUri => new Uri("https://www.baileigh.com/woodworking/lathes/lathes");
 
         protected override string FriendlyName => manufacturer;
+        protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//li[starts-with(@class, 'item')]";
 
@@ -21,7 +22,6 @@ namespace Scraper.Implementations
         public override void Run()
         {
             AddRangeKnownManufacturer(manufacturer);
-            Save(manufacturer);
         }
         
     }

@@ -3,11 +3,12 @@ using HtmlAgilityPack;
 
 namespace Scraper.Implementations
 {
-    class Grizzly : ScraperBase
+    class Grizzly : AllInOneBase
     {
-        protected override Uri SourceUri => new Uri("http://www.grizzly.com/wood-lathes?pagesize=96");
+        protected override Uri StartingUri => new Uri("http://www.grizzly.com/wood-lathes?pagesize=96");
 
         protected override string FriendlyName => "Grizzly";
+        protected override string FileName => FriendlyName;
 
         protected override string ContainerXPath => "//div[contains(@class, 'searchresult ')]";
 
@@ -30,7 +31,6 @@ namespace Scraper.Implementations
         public override void Run()
         {
             AddRangeKnownManufacturer(FriendlyName);
-            Save(FriendlyName);
         }
     }
 }

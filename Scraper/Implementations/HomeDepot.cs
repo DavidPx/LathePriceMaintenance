@@ -4,11 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace Scraper.Implementations
 {
-    class HomeDepot : ScraperBase
+    class HomeDepot : AllInOneBase
     {
         protected override string FriendlyName => "Home Depot";
+        protected override string FileName => nameof(HomeDepot);
 
-        protected override Uri SourceUri => new Uri("https://www.homedepot.com/b/Tools-Power-Tools-Woodworking-Tools-Lathes/N-5yc1vZc289");
+        protected override Uri StartingUri => new Uri("https://www.homedepot.com/b/Tools-Power-Tools-Woodworking-Tools-Lathes/N-5yc1vZc289");
 
         protected override string ContainerXPath => "//div[@data-section='gridview']/div[contains(@class,'js-pod')]";
 
@@ -34,13 +35,12 @@ namespace Scraper.Implementations
 
         protected override Uri ProduceFullSourceUri(string anchorHrefValue)
         {
-            return anchorHrefValue.MakeFullUri(SourceUri);
+            return anchorHrefValue.MakeFullUri(StartingUri);
         }
 
         public override void Run()
         {
             AddRange();
-            Save("HomeDepot");
         }
         
     }

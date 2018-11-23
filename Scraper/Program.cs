@@ -19,16 +19,18 @@ namespace Scraper
                 new BusyBee(),
                 new WoodCraft(),
                 new Rockler(),
-                new HarborFreight()
+                new HarborFreight(),
+                new EliteMetalTools()
             };
 
-            //foreach (var scraper in scrapers)
-            //{
-            //    scraper.Run();
-            //}
+            foreach (var scraper in scrapers)
+            {
+                scraper.Run();
+            }
 
-            new HarborFreight().Run();
-
+            //new EliteMetalTools().Run();
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
         }
     }
 }
