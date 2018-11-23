@@ -1,4 +1,5 @@
 ﻿using Scraper.Implementations;
+using System;
 using System.Collections.Generic;
 
 namespace Scraper
@@ -16,16 +17,15 @@ namespace Scraper
                 new Grizzly(),
                 new AcmeTools(),
                 new BusyBee(),
-                new WoodCraft()
+                new WoodCraft(),
+                new Rockler()
             };
 
-            //foreach (var scraper in scrapers)
-            //{
-            //    scraper.Run();
-            //}
+            foreach (var scraper in scrapers)
+            {
+                scraper.Run();
+            }
 
-            new WoodCraft().Run();
-            
         }
     }
 }

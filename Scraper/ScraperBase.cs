@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Xml.XPath;
 
 namespace Scraper
@@ -66,12 +67,18 @@ namespace Scraper
             return new Uri(anchorHrefValue);
         }
 
+        protected virtual bool HandlePreRequest(HttpWebRequest request)
+        {
+            return true;
+        }
+
         protected void AddRangeKnownManufacturer(string manufacturer)
         {
             if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(ManufacturerXPath))
                 throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
 
             var web = new HtmlWeb();
+            web.PreRequest += HandlePreRequest;
             
             var document = web.Load(SourceUri);
 
@@ -85,7 +92,14 @@ namespace Scraper
 
             foreach (var container in containers)
             {
-                var rawPrice = ExtractPrice(container.SelectSingleNode(PriceXPath));
+                var priceNode = container.SelectSingleNode(PriceXPath);
+                if (priceNode == null)
+                {
+                    Console.WriteLine($"Unable to find price node! Skipping.  inner text of container: {container.InnerTextClean()}");
+                    return;
+                }
+
+                var rawPrice = ExtractPrice(priceNode);
                 var rawSku = ExtractSku(container.SelectSingleNode(SkuXPath));
                 var sourceUri = ProduceFullSourceUri(container.SelectSingleNode(SourceUriAnchorXPath).GetAttributeValue("href", ""));
 
