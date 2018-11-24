@@ -66,6 +66,25 @@ namespace Scraper
 
         protected abstract void AddPriceFromContainerNode(HtmlNode containerNode, string manufacturer);
 
+        /// <summary>
+        ///  Loads the document directly using HtmlAgilityPack
+        /// </summary>
+        /// <returns></returns>
+        protected virtual HtmlDocument LoadDocument()
+        {
+            var web = new HtmlWeb();
+            web.PreRequest += HandlePreRequest;
+
+            Console.WriteLine($"Fetching {FriendlyName}...");
+
+            var doc = web.Load(StartingUri);
+
+            if (web.StatusCode != HttpStatusCode.OK)
+                throw new InvalidOperationException($"{FriendlyName} returned {web.StatusCode}, not OK");
+
+            return doc;
+        }
+
         protected void AddRangeKnownManufacturer(string manufacturer)
         {
             try
@@ -73,16 +92,8 @@ namespace Scraper
                 if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(ManufacturerXPath))
                     throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
 
-                var web = new HtmlWeb();
-                web.PreRequest += HandlePreRequest;
-
-                Console.WriteLine($"Fetching {FriendlyName}...");
-
-                var document = web.Load(StartingUri);
-
-                if (web.StatusCode != HttpStatusCode.OK)
-                    throw new InvalidOperationException($"{FriendlyName} returned {web.StatusCode}, not OK");
-
+                var document = LoadDocument();
+                
                 var containers = document.DocumentNode.SelectNodes(ContainerXPath);
 
                 if (containers == null)

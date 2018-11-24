@@ -22,7 +22,8 @@ namespace Scraper
                 new HarborFreight(),
                 new EliteMetalTools(),
                 new FactoryAuthorizedOutlet(),
-                new CraftSupplies()
+                new CraftSupplies(),
+                new PennState()
             };
 
             Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");
