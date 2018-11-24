@@ -21,7 +21,8 @@ namespace Scraper
                 new Rockler(),
                 new HarborFreight(),
                 new EliteMetalTools(),
-                new FactoryAuthorizedOutlet()
+                new FactoryAuthorizedOutlet(),
+                new CraftSupplies()
             };
 
             Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");
