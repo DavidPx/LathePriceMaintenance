@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Scraper.Bases;
 
 namespace Scraper.Implementations
 {

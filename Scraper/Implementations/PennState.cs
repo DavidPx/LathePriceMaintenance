@@ -1,13 +1,11 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using OpenQA.Selenium.Chrome;
+using Scraper.Bases;
 
 namespace Scraper.Implementations
 {
-    class PennState : AllInOneBase
+    class PennState : AllInOneSeleniumBase
     {
         public override string FriendlyName => "Penn State Industries";
 
@@ -33,23 +31,6 @@ namespace Scraper.Implementations
         {
             var raw = base.ExtractSku(node);
             return Regex.Match(raw, @"\S+$").Value;
-        }
-
-        protected override HtmlDocument LoadDocument()
-        {
-            var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArgument("headless");
-
-            using (var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), chromeOptions))
-            {
-                var nav = driver.Navigate();
-                nav.GoToUrl(StartingUri);
-                var source = driver.PageSource;
-
-                var doc = new HtmlDocument();
-                doc.LoadHtml(source);
-                return doc;
-            }
         }
 
         public override void Run()

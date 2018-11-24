@@ -1,8 +1,11 @@
 ﻿using System;
 using HtmlAgilityPack;
 
-namespace Scraper
+namespace Scraper.Bases
 {
+    /// <summary>
+    /// Drills into each container link in order to fetch details
+    /// </summary>
     abstract class DetailsBase : ScraperBase
     {
         protected abstract string DetailsLinkXPath { get; }
@@ -10,7 +13,6 @@ namespace Scraper
         protected override void AddPriceFromContainerNode(HtmlNode containerNode, string manufacturer)
         {
             var web = new HtmlWeb();
-            web.PreRequest += HandlePreRequest;
             var detailsUri = new Uri(containerNode.SelectSingleNode(DetailsLinkXPath).GetAttributeValue("href", ""));
 
             var document = web.Load(detailsUri);

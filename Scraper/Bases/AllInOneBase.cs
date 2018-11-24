@@ -1,11 +1,11 @@
 ﻿using HtmlAgilityPack;
 using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
 
-namespace Scraper
+namespace Scraper.Bases
 {
+    /// <summary>
+    /// Gets all details from the information in each container
+    /// </summary>
     abstract class AllInOneBase : ScraperBase
     {
         protected abstract string SourceUriAnchorXPath { get; }

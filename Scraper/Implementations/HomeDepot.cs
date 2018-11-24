@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Text.RegularExpressions;
+using Scraper.Bases;
 
 namespace Scraper.Implementations
 {

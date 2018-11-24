@@ -55,15 +55,15 @@ namespace Scraper
 
         public abstract void Run();
         
-        protected virtual bool HandlePreRequest(HttpWebRequest request)
-        {
-            return true;
-        }
-
         protected abstract Uri StartingUri { get; }
         public abstract string FriendlyName { get; }
         protected abstract string FileName { get; }
 
+        /// <summary>
+        /// Find the attributes of the record from the container node and add a price
+        /// </summary>
+        /// <param name="containerNode"></param>
+        /// <param name="manufacturer"></param>
         protected abstract void AddPriceFromContainerNode(HtmlNode containerNode, string manufacturer);
 
         /// <summary>
@@ -73,8 +73,7 @@ namespace Scraper
         protected virtual HtmlDocument LoadDocument()
         {
             var web = new HtmlWeb();
-            web.PreRequest += HandlePreRequest;
-
+            
             Console.WriteLine($"Fetching {FriendlyName}...");
 
             var doc = web.Load(StartingUri);

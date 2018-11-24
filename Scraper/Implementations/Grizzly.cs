@@ -1,5 +1,6 @@
 ﻿using System;
 using HtmlAgilityPack;
+using Scraper.Bases;
 
 namespace Scraper.Implementations
 {
