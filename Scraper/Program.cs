@@ -23,7 +23,8 @@ namespace Scraper
                 new EliteMetalTools(),
                 new FactoryAuthorizedOutlet(),
                 new CraftSupplies(),
-                new PennState()
+                new PennState(),
+                new Packard()
             };
 
             Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");

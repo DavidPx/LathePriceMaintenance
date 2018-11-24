@@ -6,7 +6,7 @@ namespace Scraper.Bases
     /// <summary>
     /// Drills into each container link in order to fetch details
     /// </summary>
-    abstract class DetailsBase : ScraperBase
+    abstract class DetailsBase : XPathBase
     {
         protected abstract string DetailsLinkXPath { get; }
 
