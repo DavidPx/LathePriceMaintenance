@@ -32,12 +32,12 @@ namespace Scraper.Implementations
         {
             var raw = base.ExtractSku(node);
             var words = Regex.Matches(raw, @"[\w-]+");
-            var sku = Regex.Matches(raw, @"[\w-]+")[1].Value;
+            var sku = words[1].Value;
 
             if (words[0].Value.Equals("Jet", StringComparison.OrdinalIgnoreCase))
             {
                 // JET 1840 DVR Lathe vs. 1840 EVS.  Jet has conflicting sized-based models
-                sku += Regex.Matches(raw, @"[\w-]+")[2].Value;
+                sku += words[2].Value;
             }
 
             return sku;
