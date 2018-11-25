@@ -27,7 +27,7 @@ namespace Scraper.Implementations
 
             Extract(
                 web, 
-                new Dictionary<string, string> { { "1224B", "1224" } }, 
+                new Dictionary<string, string> { { "1224B", "1224" } },
                 hpUpgrades, 
                 new Uri("http://www.packardwoodworks.com/Merchant2/merchant.mvc?Screen=CTGY&Store_Code=packard&Category_Code=lathes-oneway-1224"));
 
@@ -69,7 +69,6 @@ namespace Scraper.Implementations
                             Add(hpUpgrade.Value + matchingRow, $"{codeAndSku.Value}-{hpUpgrade.Key}", Manufacturer, uri);
                         }
                     }
-                    
                 }
             }
         }

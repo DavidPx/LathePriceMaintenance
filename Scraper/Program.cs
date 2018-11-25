@@ -25,7 +25,8 @@ namespace Scraper
                 new CraftSupplies(),
                 new PennState(),
                 new Packard(),
-                new Highland()
+                new Highland(),
+                new Robust()
             };
 
             Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");
