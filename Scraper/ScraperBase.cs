@@ -71,15 +71,17 @@ namespace Scraper
 
         protected void Add(decimal price, string manufacturerSku, string manufacturer, Uri source)
         {
+            var trimmedSku = manufacturerSku.Trim();
+
             if (Exclusions.Any(
                 r => manufacturer.Equals(r.Manufacturer, StringComparison.OrdinalIgnoreCase)
-                && r.SkuExclusionRegexes.Any(x => Regex.IsMatch(manufacturerSku, x))))
+                && r.SkuExclusionRegexes.Any(x => Regex.IsMatch(trimmedSku, x))))
                 return;
 
             var data = new CapturedPrice
             {
                 Price = price,
-                ManufacturerSku = manufacturerSku.Trim(),
+                ManufacturerSku = trimmedSku,
                 Manufacturer = manufacturer.Trim(),
                 Source = source.ToString(),
                 Extraction_Time = DateTimeOffset.Now

@@ -114,7 +114,7 @@ class Row
 	public decimal Price { get; set; }
 	public string ManufacturerSku { get; set; }
 	public string Manufacturer { get; set; }
-	public Uri Source { get; set; }
+	public string Source { get; set; }
 	public DateTimeOffset Extraction_Time { get; set; }
 }
 
