@@ -15,6 +15,8 @@ namespace Scraper.Implementations
 
         public override void Run()
         {
+            Console.WriteLine($"Fetching {FriendlyName}...");
+
             var web = new HtmlWeb();
 
             Extract(

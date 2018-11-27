@@ -22,7 +22,7 @@ namespace Scraper.Implementations
 
         protected override string ManufacturerXPath => ".//span[@class='brand-name']";
 
-        protected override IList<ManufacturerExclusion> Exclusions => new[] 
+        protected override IList<ManufacturerExclusion> Exclusions => new[]
         {
             new ManufacturerExclusion
             {

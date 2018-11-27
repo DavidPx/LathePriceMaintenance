@@ -30,9 +30,6 @@ void Main()
 			// My price data has dollar signs so those need to be stripped out before parsing to a decimal
 			classMap.Map(row => row.Price).ConvertUsing(row => decimal.Parse(row.GetField("Price").Replace("$", "")));
 			
-			// CsvHelper doesn't support URIs so that requires help as well
-			classMap.Map(row => row.Source).ConvertUsing(row => new Uri(row.GetField("Source")));
-					
 			var prices = csv.GetRecords<Row>();
 			
 			foreach (var price in prices)
@@ -70,7 +67,10 @@ void Main()
 	var range = "Input!A2:F";
 	
 	var getter = service.Spreadsheets.Values.Get(spreadsheetId, range);
+	getter.ValueRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.UNFORMATTEDVALUE;
 	var existingData = getter.Execute();
+	
+	var priceChanges = new List<PriceChange>();
 	
 	var values = new ValueRange();
 	values.Range = range;
@@ -94,11 +94,21 @@ void Main()
 		{
 			var sku = existingRow[0].ToString();
 			var site = existingRow[5].ToString();
+			
+			var match = values.Values.FirstOrDefault(v => v[0].Equals(sku) && v[5].Equals(site));
 
-			if (!values.Values.Any(v => v[0].Equals(sku) && v[5].Equals(site)))
+			if (match == null)
 			{
 				values.Values.Add(existingRow);
 				existingRow.Dump("backfilled existing row");
+			}
+			else
+			{
+				var existingPrice = Convert.ToDecimal(existingRow[1]);
+				var newPrice = Convert.ToDecimal(match[1]);
+
+				if (existingPrice != newPrice)
+					priceChanges.Add(new PriceChange {Sku = sku, OldPrice = existingPrice, NewPrice = newPrice, Source = site});
 			}
 		}
 	}
@@ -106,6 +116,8 @@ void Main()
 	var putter = service.Spreadsheets.Values.Update(values, spreadsheetId, range);
 	putter.ValueInputOption = ValueInputOptionEnum.RAW;
 	putter.Execute().Dump();
+	
+	priceChanges.Dump("Price Changes");
 }
 
 class Row
@@ -129,4 +141,12 @@ class RowWithSource : Row
 		this.Extraction_Time = r.Extraction_Time;
 	}
 	public string Site { get; set; }
+}
+
+class PriceChange
+{
+	public string Source { get; set; }
+	public string Sku { get; set; }
+	public decimal OldPrice { get; set; }
+	public decimal NewPrice { get; set; }
 }
