@@ -6,7 +6,7 @@ namespace Scraper.Bases
     /// <summary>
     /// Gets all details from the information in each container
     /// </summary>
-    abstract class AllInOneBase : XPathBase
+    abstract class AllInOneBase : ContainerXPathBase
     {
         protected abstract string SourceUriAnchorXPath { get; }
         

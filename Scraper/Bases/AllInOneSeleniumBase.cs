@@ -10,7 +10,7 @@ namespace Scraper.Bases
     /// </summary>
     abstract class AllInOneSeleniumBase : AllInOneBase
     {
-        protected override HtmlDocument LoadDocument()
+        protected override HtmlDocument LoadDocumentWithSelenium()
         {
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArgument("headless");

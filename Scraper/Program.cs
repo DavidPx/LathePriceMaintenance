@@ -26,7 +26,9 @@ namespace Scraper
                 new PennState(),
                 new Packard(),
                 new Highland(),
-                new Robust()
+                new Robust(),
+                new Amazon(),
+                new ArizonaSilhouette()
             };
 
             Console.WriteLine("Press Enter to run all, or key in the number of the scraper to run:");

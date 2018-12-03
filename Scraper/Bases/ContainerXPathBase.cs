@@ -5,14 +5,11 @@ using System.Net;
 namespace Scraper.Bases
 {
     /// <summary>
-    /// What most implementations will inherit from; defines the common set of xpaths and iterative methods
+    /// A base that assumes that we are starting from one page and iterating from there.  The exact iteration mechanism is determined in a subclass.
     /// </summary>
-    abstract class XPathBase : ScraperBase
+    abstract class ContainerXPathBase : PriceDetailsXPathBase
     {
         protected abstract string ContainerXPath { get; }
-        protected abstract string PriceXPath { get; }
-        protected abstract string SkuXPath { get; }
-        protected virtual string ManufacturerXPath { get; }
 
         protected abstract Uri StartingUri { get; }
 
@@ -20,7 +17,7 @@ namespace Scraper.Bases
         ///  Loads the document directly using HtmlAgilityPack
         /// </summary>
         /// <returns></returns>
-        protected virtual HtmlDocument LoadDocument()
+        protected virtual HtmlDocument LoadDocumentWithSelenium()
         {
             var web = new HtmlWeb();
 
@@ -49,7 +46,7 @@ namespace Scraper.Bases
                 if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(ManufacturerXPath))
                     throw new InvalidOperationException("Provider either a manufacturer or xpath to get it");
 
-                var document = LoadDocument();
+                var document = LoadDocumentWithSelenium();
 
                 var containers = document.DocumentNode.SelectNodes(ContainerXPath);
 
