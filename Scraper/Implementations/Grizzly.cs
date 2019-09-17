@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using HtmlAgilityPack;
 using Scraper.Bases;
 
@@ -17,7 +18,8 @@ namespace Scraper.Implementations
 
         protected override string SkuXPath => ".//div[@class='searchresult-metadata']";
 
-        protected override string SourceUriAnchorXPath => ".//a[@class='btn btn-cta']";
+        protected override string SourceUriAnchorXPath => ".//a[@class='searchresultdesclink']";
+        protected override string ManufacturerXPath => ".//a[@class='searchresultdesclink']";
 
         protected override string ExtractPrice(HtmlNode node)
         {
@@ -29,9 +31,33 @@ namespace Scraper.Implementations
             return node.GetAttributeValue("data-itemnumber", "");
         }
 
+        protected override string ExtractManufacturer(HtmlNode node)
+        {
+            // Manufacturer is the first word in the product URL
+            var href = node.GetAttributeValue("href", "");
+
+            var segments = href.Split('/');
+            var biggest = segments.Skip(1).OrderByDescending(s => s.Length).First();
+
+            var bits = biggest.Split('-');
+
+            return 
+                string
+                    .Join(' ',
+                    bits
+                    .Take(2)
+                    .Where(b =>
+                    {
+                        int foo;
+                        return !int.TryParse(b, out foo);
+                    })
+                    );
+                
+        }
+
         public override void Run()
         {
-            AddRangeKnownManufacturer(FriendlyName);
+            AddRange();
         }
     }
 }
